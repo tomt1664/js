@@ -26,7 +26,7 @@ function getValidSecret() {
 }
 exports.getValidSecret = getValidSecret;
 function aesEncrypt(key, plainText) {
-    var nonce = crypto_1.randomBytes(16);
+    var nonce = crypto_1.randomBytes(12);
     var cipher = crypto_1.createCipheriv("aes-256-gcm", key, nonce);
     var encrypted = Buffer.concat([cipher.update(plainText), cipher.final()]);
     var tag = cipher.getAuthTag();
@@ -35,8 +35,8 @@ function aesEncrypt(key, plainText) {
 exports.aesEncrypt = aesEncrypt;
 function aesDecrypt(key, cipherText) {
     var nonce = cipherText.slice(0, 12);
-    var tag = cipherText.slice(16, 32);
-    var ciphered = cipherText.slice(32);
+    var tag = cipherText.slice(12, 28);
+    var ciphered = cipherText.slice(28);
     var decipher = crypto_1.createDecipheriv("aes-256-gcm", key, nonce);
     decipher.setAuthTag(tag);
     return Buffer.concat([decipher.update(ciphered), decipher.final()]);
