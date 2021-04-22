@@ -21,7 +21,7 @@ export function getValidSecret(): Buffer {
 }
 
 export function aesEncrypt(key: Buffer, plainText: Buffer): Buffer {
-    const nonce = randomBytes(16);
+    const nonce = randomBytes(12);
     const cipher = createCipheriv("aes-256-gcm", key, nonce);
     const encrypted = Buffer.concat([cipher.update(plainText), cipher.final()]);
     const tag = cipher.getAuthTag();
@@ -30,8 +30,8 @@ export function aesEncrypt(key: Buffer, plainText: Buffer): Buffer {
 
 export function aesDecrypt(key: Buffer, cipherText: Buffer): Buffer {
     const nonce = cipherText.slice(0, 12);
-    const tag = cipherText.slice(16, 32);
-    const ciphered = cipherText.slice(32);
+    const tag = cipherText.slice(12, 28);
+    const ciphered = cipherText.slice(28);
     const decipher = createDecipheriv("aes-256-gcm", key, nonce);
     decipher.setAuthTag(tag);
     return Buffer.concat([decipher.update(ciphered), decipher.final()]);
