@@ -29,7 +29,7 @@ export function aesEncrypt(key: Buffer, plainText: Buffer): Buffer {
 }
 
 export function aesDecrypt(key: Buffer, cipherText: Buffer): Buffer {
-    const nonce = cipherText.slice(0, 16);
+    const nonce = cipherText.slice(0, 12);
     const tag = cipherText.slice(16, 32);
     const ciphered = cipherText.slice(32);
     const decipher = createDecipheriv("aes-256-gcm", key, nonce);
